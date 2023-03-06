@@ -1,0 +1,157 @@
+.header {
+  display: flex;
+  width: 100%;
+  box-sizing: border-box;
+  border-bottom: 1.5px solid lightgrey;
+  position: fixed;
+  background-color: white;
+  z-index: 1200;
+  top: 0;
+  left: 0;
+  right: 0;
+  color: #464646;
+}
+
+.header > h2 {
+  margin: 1rem;
+}
+
+.header>.iconButton{
+  display: none;
+}
+
+section {
+  color: #464646;
+  display: flex;
+  width: 100%;
+  justify-content: center;
+  box-sizing: border-box;
+  padding: 1rem;
+  gap: 1rem;
+}
+
+section:nth-child(3) {
+  flex-direction: column;
+  justify-content: flex-start;
+  border-top: 1.5px solid lightgrey;
+}
+
+section ul {
+  list-style: none;
+  padding-inline-start: 0;
+  margin-block-start: 0;
+  margin-block-end: 0;
+}
+
+.catList li {
+  border: 1.5px solid lightgrey;
+  padding: 1rem;
+  box-sizing: border-box;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 1rem;
+  cursor: pointer;
+}
+
+.catList li:first-child {
+  border-top-left-radius: 5px;
+  border-top-right-radius: 5px;
+}
+
+.catList li:last-child {
+  border-bottom-left-radius: 5px;
+  border-bottom-right-radius: 5px;
+}
+
+li span:nth-child(2) {
+  display: flex;
+  align-items: center;
+  box-sizing: border-box;
+  padding: 0 0.5rem;
+  border-radius: 9px;
+  background-color: grey;
+  color: aliceblue;
+  font-size: 0.9rem;
+  height: 20px;
+}
+
+/* card styling */
+
+article {
+  display: flex;
+  gap: 1rem;
+  flex-wrap: wrap;
+  min-width: 36rem;
+}
+
+/* form styling */
+
+.form > div {
+  border: 1px solid lightgrey;
+  box-sizing: border-box;
+  border-radius: 5px;
+  padding: 1rem;
+  display: flex;
+  flex-direction: column;
+  row-gap: 2rem;
+  width: 280px;
+}
+
+.form form {
+  display: flex;
+  flex-direction: column;
+  row-gap: 1rem;
+}
+
+.form form div {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+}
+
+.form form div:nth-child(4) {
+  display: flex;
+  flex-direction: row;
+}
+
+.form > div input {
+  padding: 10px;
+  padding: 20px 12px;
+  box-sizing: border-box;
+}
+
+/* image galary */
+
+.imgGalary {
+  width: 100%;
+}
+
+.imgGalary > ul {
+  list-style: none;
+  display: flex;
+  justify-content: center;
+  flex-wrap: wrap;
+  gap: 1rem;
+}
+
+@media screen and (max-width: 850px) {
+  article {
+    min-width: min-content;
+    width: min-content;
+  }
+}
+
+
+@media screen and (max-width: 506px) {
+    section{
+      padding: 0.6rem;
+      gap: 0.6rem;
+    }
+}
+
+@media screen and (max-width: 570px) {
+  .header>.iconButton{
+    display: block;
+  }
+}

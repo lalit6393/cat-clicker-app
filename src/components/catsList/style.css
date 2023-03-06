@@ -1,0 +1,17 @@
+@media screen and (max-width: 570px) {
+    .catlist>ul:nth-child(2){
+        display: block;
+    }
+    .catlist>ul:nth-child(1){
+        display: none;
+    }
+}
+
+@media screen and (min-width: 570px) {
+    .catlist>ul:nth-child(2){
+        display: none;
+    }
+    .catlist>ul:nth-child(1){
+        display: block;
+    }
+}
