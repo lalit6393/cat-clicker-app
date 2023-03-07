@@ -9,6 +9,9 @@ import {
 } from "./actionType";
 import axios from "axios";
 
+// const url = "http://localhost:3000";
+const url = "https://cat-clicker-app-server.onrender.com";
+
 export const fetchCatRequest = () => {
   return {
     type: FETCH_CAT_REQUEST,
@@ -71,7 +74,7 @@ export const fetchCats = (updating) => {
   return (dispatch) => {
     if (!updating) dispatch(fetchCatRequest());
     axios
-      .get("http://localhost:3000/cat")
+      .get(`${url}/cat`)
       .then((response) => {
         const cats = response.data.cats;
         dispatch(fetchCatSuccess(cats));
@@ -87,7 +90,7 @@ export const updateCat = (data, id, loader) => {
   return (dispatch) => {
     if(loader) dispatch(updateCatRequest());
     axios
-      .put(`http://localhost:3000/cat/${id}`, data)
+      .put(`${url}/cat/${id}`, data)
       .then((response) => {
         dispatch(fetchCats(true));
         dispatch(updateCatSuccess());
@@ -104,7 +107,7 @@ export const imageUpload = (data, id) => {
     dispatch(updateCatRequest());
     const options = {
       method: "post",
-      url: `http://localhost:3000/cat/img/${id}`,
+      url: `${url}/cat/img/${id}`,
       headers: {
         "Content-Type": "text/plain",
       },
@@ -126,7 +129,7 @@ export const imageUpload = (data, id) => {
 export const saveNewCat = (data, image) => {
   return (dispatch) => {
     dispatch(updateCatRequest());
-    axios.post("http://localhost:3000/cat", data)
+    axios.post(`${url}/cat`, data)
     .then((response) => {
       const cat = response.data.cat;
       if(cat?._id){

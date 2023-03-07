@@ -22,7 +22,7 @@ const CatList = ({ open, handleListClick, selectedId }) => {
 
   const catList = state.cats.map((cat) => (
     <li
-      onClick={() => handleListClick(cat._id, cat.clicks)}
+      onClick={() => handleListClick(cat._id)}
       key={cat._id}
       style={
         selectedId === cat._id
