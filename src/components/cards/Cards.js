@@ -1,9 +1,17 @@
 import { Skeleton } from "@mui/material";
 import React from "react";
 import { useSelector } from "react-redux";
+import { incrementClicks } from "../../redux/cats/actionCreator";
+import { useDispatch } from "react-redux";
 
 const Cards = ({ cat, size }) => {
   const state = useSelector((state) => state.cats);
+  const dispatch = useDispatch();
+
+  const handleClick = (_id, clicks) => {
+    if (_id && clicks >= 0)
+      dispatch(incrementClicks({ clicks: clicks + 1 }, _id));
+  };
 
   const styles = {
     card: {
@@ -11,6 +19,8 @@ const Cards = ({ cat, size }) => {
       boxSizing: "border-box",
       borderRadius: "5px",
       width: size.width || "200px",
+      cursor: "pointer",
+      minWidth: "150px"
     },
     name: {
       fontSize: size.font,
@@ -21,6 +31,9 @@ const Cards = ({ cat, size }) => {
     },
     imageDiv: {
       overflow: "hidden",
+      display: "flex",
+      justifyContent: "center",
+      height: size.height || "100px"
     },
     link: {
       color: "#1e88e5",
@@ -34,7 +47,7 @@ const Cards = ({ cat, size }) => {
   };
 
   return (
-    <div style={styles.card}>
+    <div style={styles.card} onClick={() => handleClick(cat._id, cat.clicks)}>
       <div style={styles.oddDiv}>
         <h2 style={styles.name}>
           {cat?.name ? (
@@ -46,12 +59,13 @@ const Cards = ({ cat, size }) => {
           )}
         </h2>
         <p style={styles.p}>
-          No. of times clicked: <span>{cat?.id}</span>
+          No. of times clicked: <span>{cat?.clicks}</span>
         </p>
       </div>
       <div style={styles.imageDiv}>
+        <div>
         {!state.loading ? (
-          <img src="#" height={size.height} width={size.width} />
+          <img src={cat?.image} width={size.width} alt={"Card"}/>
         ) : (
           <Skeleton
             variant="rectangular"
@@ -59,6 +73,7 @@ const Cards = ({ cat, size }) => {
             width={size.width}
           />
         )}
+        </div>
       </div>
       <div style={styles.oddDiv}>
         <p style={styles.link}>Card Link</p>

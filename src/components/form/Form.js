@@ -1,41 +1,116 @@
-import { Button, TextField } from "@mui/material";
+import { Button, CircularProgress, TextField } from "@mui/material";
 import React, { useEffect, useRef, useState } from "react";
+import { useDispatch, useSelector } from "react-redux";
+import {
+  imageUpload,
+  newCat,
+  saveNewCat,
+  undoCat,
+  updateCat,
+} from "../../redux/cats/actionCreator";
 
 const Form = ({ cat }) => {
+  const state = useSelector((state) => state.cats);
+  const dispatch = useDispatch();
   const inputRef = useRef(null);
   const [name, setName] = useState(cat?.name || "name");
-  const [clicks, setClicks] = useState(cat?.id || "0");
-  const [imageName, setImageName] = useState("image");
-  const [image, setImage] = useState("");
+  const [clicks, setClicks] = useState(cat?.clicks || 0);
+  const [imageName, setImageName] = useState(cat?.imgName || "image");
+  const [image, setImage] = useState(null);
+
+  //reading image to be uploaded
 
   const handleImageChange = (e) => {
     let file = e.nativeEvent.srcElement.files[0];
     let reader = new FileReader();
-    setImageName(file.name);
-    reader.readAsDataURL(file);
-    reader.onload = () => {
-      setImage(reader.result);
-    };
+    if (file) {
+      setImageName(file.name);
+      reader.readAsDataURL(file);
+      reader.onload = () => {
+        setImage(reader.result);
+      };
+    }
   };
 
-  const handleSubmit = (e) => {
-    console.log({ name: name, image: image, clicks: clicks });
+  //uploading image and image name
+
+  const handleSubmit = (e, id) => {
+    // console.log(e, id);
     e.preventDefault();
+    if (id === "newcat") {
+      if (name && clicks && imageName) {
+        let mycat = {
+          name: name,
+          clicks: clicks,
+          imgName: imageName,
+          image: "",
+        };
+        let myimage = image || cat.image;
+        dispatch(saveNewCat(mycat, myimage));
+      } else {
+        console.log("data not found");
+      }
+    } else {
+      if (image !== cat.image && image && image.trim()) {
+        dispatch(imageUpload(image, id));
+        dispatch(
+          updateCat({ name: name, clicks: clicks, imgName: imageName }, id)
+        );
+      } else {
+        dispatch(
+          updateCat({ name: name, clicks: clicks, imgName: imageName }, id)
+        );
+      }
+    }
   };
+
+  //adding new cat
+
+  const addNewCat = () => {
+    let newcat = {};
+    newcat._id = "newcat";
+    newcat.name = name;
+    newcat.clicks = clicks;
+    newcat.imgName = imageName;
+    newcat.image = image || cat.image;
+    dispatch(newCat(newcat));
+  };
+
+  //updating every time cat changes
 
   useEffect(() => {
     if (cat) {
       setName(cat.name);
-      setClicks(cat.id);
+      setClicks(cat.clicks);
+      setImageName(cat.imgName);
     }
   }, [cat]);
 
+  const styles = {
+    form: {
+      position: "relative",
+      backgroundColor: "#f2f2f2",
+    },
+    progressBar: {
+      position: "absolute",
+      left: "40%",
+      top: "40%",
+    },
+  };
+
   return (
-    <div>
+    <div style={state?.updating ? styles.form : { position: "relative" }}>
+      {state.updating ? (
+        <div style={styles.progressBar}>
+          <CircularProgress />
+        </div>
+      ) : null}
       <div>
-        <Button variant="contained">Open New Form</Button>
+        <Button onClick={addNewCat} variant="contained">
+          Open New Form
+        </Button>
       </div>
-      <form onSubmit={handleSubmit}>
+      <form onSubmit={(e) => handleSubmit(e, cat._id)}>
         <div>
           <label>Cat Name</label>
           <TextField
@@ -69,7 +144,7 @@ const Form = ({ cat }) => {
           <label>Cat Clicks</label>
           <TextField
             type={"number"}
-            value={clicks}
+            value={clicks >= 0 ? clicks : ''}
             onChange={(e) => setClicks(e.target.value)}
             id="outlined-basic"
             variant="outlined"
@@ -79,7 +154,11 @@ const Form = ({ cat }) => {
           <Button type="submit" variant="contained" color="success">
             Save
           </Button>
-          <Button variant="contained" color="error">
+          <Button
+            onClick={() => dispatch(undoCat())}
+            variant="contained"
+            color="error"
+          >
             Undo
           </Button>
         </div>

@@ -1,5 +1,5 @@
-import { CircularProgress, Skeleton } from "@mui/material";
-import React, { useEffect } from "react";
+import {Skeleton } from "@mui/material";
+import React from "react";
 import { useSelector } from "react-redux";
 import "./style.css";
 
@@ -7,31 +7,31 @@ const CatList = ({ open, handleListClick, selectedId }) => {
   const state = useSelector((state) => state.cats);
   const catListforMobile = state.cats.map((cat) => (
     <li
-      onClick={() => handleListClick(cat.id)}
-      key={cat.id}
+      onClick={() => handleListClick(cat._id)}
+      key={cat._id}
       style={
-        selectedId == cat.id
-          ? { backgroundColor: "#1976d2", color: "whitesmoke" }
-          : { backgroundColor: "white" }
+        selectedId === cat._id
+        ? { backgroundColor: "#1976d2", color: "whitesmoke", borderColor: "#1976d2" }
+        : { backgroundColor: "white",  borderColor: "lightgrey"}
       }
     >
       <span>{open ? cat.name : cat.name.slice(0, 2)}</span>
-      {open ? <span>{cat.id}</span> : null}
+      {open ? <span>{cat?.clicks}</span> : null}
     </li>
   ));
 
   const catList = state.cats.map((cat) => (
     <li
-      onClick={() => handleListClick(cat.id)}
-      key={cat.id}
+      onClick={() => handleListClick(cat._id, cat.clicks)}
+      key={cat._id}
       style={
-        selectedId == cat.id
-          ? { backgroundColor: "#1976d2", color: "whitesmoke" }
-          : { backgroundColor: "white" }
+        selectedId === cat._id
+          ? { backgroundColor: "#1976d2", color: "whitesmoke", borderColor: "#1976d2" }
+          : { backgroundColor: "white",  borderColor: "lightgrey"}
       }
     >
       <span>{cat.name}</span>
-      <span>{cat.id}</span>
+      <span>{cat?.clicks}</span>
     </li>
   ));
 
